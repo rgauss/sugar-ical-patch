@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>SugarCRM iCal Patch</title>
+        <style>
+        body {
+            font: 12px Arial, Helvetica, Geneva, Swiss, SunSans-Regular;
+        }
+        .subtle {
+            color: gray;
+        }
+        .steps li {
+            margin-bottom: 0.7em;
+        }
+        .footer {
+            font-size: 0.8em;
+            margin-top: 6em;
+        }
+        .code {
+            padding: 0.5em 2em;
+        }
+        .alert {
+            color: red;
+        }
+        .section {
+            padding: 0em 1em 0em 1em;
+        }
+    </style>
+</head>
+<body>
+    <h3>SugarCRM iCal Patch</h3>
+
+    <p><span class="alert">PREVIOUS USERS MUST CHANGE THE URL IN ICAL TO ical_server.php
+    INSTEAD OF vcal_server.php</span></p>
+
+    <h4>SugarCRM Setup:</h4>
+    <div class="section">
+        <p>Requires SugarCRM 6.2 or higher.</p>
+
+        <p>The patch is installed through the SugarCRM Module Loader and you must
+        'Clear Vardefs Data Cache' for the ProjectTask module from the Repair section
+        of admin as the patch adds a few fields that the SugarCRM team removed.
+        Once the patch is installed you may want to use the Studio to replace the
+        Date Due fields for ProjectTasks.</p>
+
+        <p>Each user should specify a <strong>Publish Key</strong> in the Calendar Options of their MyAccount
+        section in Sugar.  Note: this key will be transmitted in clear text and shown
+        on the screen in iCal and SugarCRM's interface so don't use your regular password.</p>
+    </div>
+
+    <h4>iCal Setup:</h4>
+    <div class="section">
+        <p>Once the key has been specified go to iCal and choose <strong>Subscribe</strong> from the
+        Calendar menu item.  Enter a URL similar to:</p>
+
+        <div class="code">
+            <code>http://YOURSERVER/sugar/ical_server.php?type=ics&email=YOUREMAIL&source=outlook&key=YOURKEY</code>
+        </div>
+
+        <p>replacing <code>YOURSERVER</code>, <code>YOUREMAIL</code>, and <code>YOURKEY</code>
+        with their appropriate values.</p>
+
+        <p>You can also use <strong><code>user_name</code></strong> and your username in place of the email field.
+        (This is virtually the same as the URL given in the My Account section of
+        SugarCRM with the exception of type being ics instead of vfb)</p>
+
+        <p>Alternatively, you can just specify:</p>
+
+        <div class="code">
+            <code>http://YOURSERVER/sugar/ical_server.php?type=ics</code>
+        </div>
+
+        <p>and let iCal prompt you for your username and key (not your actual Sugar password).</p>
+    </div>
+
+    <h4>Number of Months:</h4>
+    <div class="section">
+        <p>The default number of months to fetch events from is +-2 but you can override that by specifying num_months in the URL:</p>
+
+        <div class="code">
+            <code>http://YOURSERVER/sugar/ical_server.php?type=ics&num_months=4</code>
+        </div>
+    </div>
+
+    <h4>Encoding:</h4>
+    <div class="section">
+        <p>The default encoding will be UTF-8 but you can override that by specifying the encoding in the URL:</p>
+
+        <div class="code">
+            <code>http://YOURSERVER/sugar/ical_server.php?type=ics&encoding=iso-8859-1</code>
+        </div>
+    </div>
+
+    <h4>Charset:</h4>
+    <div class="section">
+        <p>The default charset will be UTF-8 but you can override that by specifying the charset in the URL:</p>
+
+        <div class="code">
+            <code>http://YOURSERVER/sugar/ical_server.php?type=ics&cal_charset=iso-8859-1</code>
+        </div>
+    </div>
+
+    <h4>HTTP Spec:</h4>
+    <div class="section">
+        <p>The default HTTP spec is 1.1 but you can override that by specifying the spec in the URL, useful when deploying to some servers like nginx (which SugarCRM on demand uses):</p>
+
+        <div class="code">
+            <code>http://YOURSERVER/sugar/ical_server.php?type=ics&http_spec=1.0</code>
+        </div>
+    </div>
+
+    <h4>Changes for 0.8.6:</h4>
+    <ul>
+        <li>Fix for date offset and ability to specify num_months in URL.</li>
+    </ul>
+
+    <h4>Changes for 0.8.5:</h4>
+    <ul>
+        <li>Fix for SugarCRM 6.2 changes affecting timezone DST start and stop.</li>
+    </ul>
+
+    <h4>Changes for 0.8.4:</h4>
+    <ul>
+        <li>Workaround for SugarCRM 6.2 bug <a target="_blank" href="http://www.sugarcrm.com/crm/support/bugs.html#issue_45177">45177</a></li>
+    </ul>
+
+    <h4>Changes for 0.8.3:</h4>
+    <ul>
+        <li>Compatible with SugarCRM 6.2</li>
+        <li>Ability to hide calls with hide_calls=true</li>
+        <li>http_spec parameter</li>
+        <li>Output buffering fix provided by Dmitriy Trt</li>
+        <li>No alerts for held events provided by Karl Ginter</li>
+    </ul>
+
+    <h4>Changes for 0.8.2:</h4>
+    <ul>
+        <li>Ability to override charset</li>
+    </ul>
+
+    <h4>Changes for 0.8.1:</h4>
+    <ul>
+        <li>Fix for timezone issues introduced in SugarCRM 6</li>
+    </ul>
+
+    <h4>Changes for 0.8:</h4>
+    <ul>
+        <li>Percent complete fixes for some clients like Lightning (Karl Ginter)</li>
+        <li>Fix for due dates with time</li>
+    </ul>
+
+    <h4>Changes for 0.7:</h4>
+    <ul>
+        <li>Support for SugarCRM 6</li>
+        <li>Timezone fix (Javier Diez <a target="_blank" href="http://www.escalait.com">Escala IT</a>)</li>
+    </ul>
+
+    <h4>Changes for 0.6:</h4>
+    <ul>
+        <li>Upgrade safe</li>
+        <li>Fixed for quote encoding</li>
+        <li>Added ability to specify encoding</li>
+    </ul>
+
+    <br/>
+    <p>If you find this extension useful please consider making a donation to encourage its development in the future:</p>
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="4459812">
+        <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+        <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+    </form>
+    <br/>
+    <br/>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<project name="sugar_iCal" basedir="." default="usage">
+    <property file="version.properties"/>
+
+    <property name="src.dir" value="src"/>
+    <property name="dist.dir" value="dist" />
+
+    <property name="manifest.file" value="manifest.php" />
+    <property name="license.file" value="LICENSE.txt" />
+
+    <target name="usage">
+    <echo message=""/>
+        <echo message="${ant.project.name} build file"/>
+        <echo message="-----------------------------------"/>
+        <echo message=""/>
+        <echo message="Available targets are:"/>
+        <echo message=""/>
+        <echo message="package    --> Package files for distribution"/>
+        <echo message=""/>
+    </target>
+
+    <target name="package">
+        <zip destfile="${dist.dir}/${ant.project.name}-${version}.zip" >
+            <fileset dir="${src.dir}" excludes="**/*CVS*"/>
+            <fileset dir="." includes="${manifest.file}"/>
+            <fileset dir="." includes="${license.file}"/>
+        </zip>
+    </target>
+
+    <target name="package-pro">
+        <zip destfile="${dist.dir}/${ant.project.name}-pro-${version}.zip" >
+            <fileset dir="${src.dir}" excludes="**/*CVS*"/>
+            <fileset dir="." includes="${manifest.file}"/>
+        </zip>
+    </target>
+
+</project>
