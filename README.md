@@ -118,5 +118,9 @@ useful when deploying to some servers like nginx (which SugarCRM on demand uses)
 
 If you find this extension useful please consider making a donation to encourage its development in the future:
 
+
+
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VNSGPCJPR5NN4"><img border="0" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" /></a>
+
+
 
