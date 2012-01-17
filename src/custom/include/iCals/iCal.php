@@ -269,7 +269,7 @@ class iCal extends vCal {
         $tz = $this->getUserTimezone($current_user);
 
         if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
-            $year_date = SugarDateTime::createFromFormat("Y", $year, $gmtTZ);
+            $year_date = SugarDateTime::createFromFormat("Y", $year, $tz);
             $year_end = clone $year_date;
             $year_end->setDate((int) $year, 12, 31);
             $year_end->setTime(23, 59, 59);
