@@ -279,8 +279,13 @@ class iCal extends vCal {
             $transitions = $tz->getTransitions($year_date->getTimestamp(), $year_end->getTimestamp());
 
             $idx = 0;
-            while (! $transitions[$idx]["isdst"])
+            while ((!$transitions[$idx]["isdst"]) && ($idx < count($transitions)))
                 $idx ++;
+            if (!$transitions[$idx]["isdst"])
+            {
+                // No DST transitions found
+                return array();
+            }
             $startTransition = $transitions[$idx];
             while ($transitions[$idx]["isdst"])
                 $idx ++;
