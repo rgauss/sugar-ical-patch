@@ -314,32 +314,34 @@ class iCal extends vCal {
 
         $dstOffset = 0;
         $gmtOffset = 0;
-        if (array_key_exists('start', $dstRange)) {
-            $dstOffset = ($dstRange['start']['offset'] / 60);
-            $startDate = new DateTime("@" . $dstRange["start"]["ts"], $gmtTZ);
-            $startstamp = strtotime($timedate->asDb($startDate));
-        }
-        if (array_key_exists('end', $dstRange)) {
-            $gmtOffset = ($dstRange['end']['offset'] / 60);
-            $endDate = new DateTime("@" . $dstRange["end"]["ts"], $gmtTZ);
-            $endstamp = strtotime($timedate->asDb($endDate));
-        }
 
         $timezoneString = "BEGIN:VTIMEZONE\n";
         $timezoneString .= "TZID:" . $timezoneName . "\n";
         $timezoneString .= "X-LIC-LOCATION:" . $timezoneName . "\n";
 
-        $timezoneString .= "BEGIN:DAYLIGHT\n";
-        $timezoneString .= "TZOFFSETFROM:" . $this->convert_min_to_hr_min($gmtOffset) . "\n";
-        $timezoneString .= "TZOFFSETTO:" . $this->convert_min_to_hr_min($dstOffset) . "\n";
-        $timezoneString .= "DTSTART:" . str_replace("Z", "", $this->get_utc_time($startstamp)) . "\n";
-        $timezoneString .= "END:DAYLIGHT\n";
+        if (array_key_exists('start', $dstRange))
+        {
+            $dstOffset = ($dstRange['start']['offset'] / 60);
+            $startDate = new DateTime("@" . $dstRange["start"]["ts"], $gmtTZ);
+            $startstamp = strtotime($timedate->asDb($startDate));
+            $timezoneString .= "BEGIN:DAYLIGHT\n";
+            $timezoneString .= "TZOFFSETFROM:" . $this->convertMinsToHoursAndMins($gmtOffset) . "\n";
+            $timezoneString .= "TZOFFSETTO:" . $this->convertMinsToHoursAndMins($dstOffset) . "\n";
+            $timezoneString .= "DTSTART:" . str_replace("Z", "", $this->getUtcTime($startstamp)) . "\n";
+            $timezoneString .= "END:DAYLIGHT\n";
+        }
 
-        $timezoneString .= "BEGIN:STANDARD\n";
-        $timezoneString .= "TZOFFSETFROM:" . $this->convert_min_to_hr_min($dstOffset) . "\n";
-        $timezoneString .= "TZOFFSETTO:" . $this->convert_min_to_hr_min($gmtOffset) . "\n";
-        $timezoneString .= "DTSTART:" . str_replace("Z", "", $this->get_utc_time($endstamp)) . "\n";
-        $timezoneString .= "END:STANDARD\n";
+        if (array_key_exists('end', $dstRange))
+        {
+            $gmtOffset = ($dstRange['end']['offset'] / 60);
+            $endDate = new DateTime("@" . $dstRange["end"]["ts"], $gmtTZ);
+            $endstamp = strtotime($timedate->asDb($endDate));
+            $timezoneString .= "BEGIN:STANDARD\n";
+            $timezoneString .= "TZOFFSETFROM:" . $this->convertMinsToHoursAndMins($dstOffset) . "\n";
+            $timezoneString .= "TZOFFSETTO:" . $this->convertMinsToHoursAndMins($gmtOffset) . "\n";
+            $timezoneString .= "DTSTART:" . str_replace("Z", "", $this->getUtcTime($endstamp)) . "\n";
+            $timezoneString .= "END:STANDARD\n";
+        }
 
         $timezoneString .= "END:VTIMEZONE\n";
 
